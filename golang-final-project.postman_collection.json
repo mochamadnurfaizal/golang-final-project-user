@@ -213,6 +213,34 @@
 			"response": []
 		},
 		{
+			"name": "/customer/profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/customer/profile",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"customer",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/admin/list-user",
 			"request": {
 				"auth": {

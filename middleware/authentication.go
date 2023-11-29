@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"fmt"
 	"golang-final-project-user/helpers"
 	"golang-final-project-user/models"
 	"net/http"
@@ -11,10 +10,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
+func AuthenticationCustomer(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		fmt.Println("Executing custom middleware before the request")
-
 		tokenString := c.Request().Header.Get("Authorization")
 		verifyToken, err := helpers.VerifyToken(tokenString)
 

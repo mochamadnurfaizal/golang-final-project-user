@@ -45,5 +45,9 @@ func main() {
 	groupAdmin.GET("/list-user", controllers.ListUser)
 	groupAdmin.DELETE("/delete-user/:id", controllers.DeleteUser)
 
+	groupCustomer := r.Group("/customer")
+	groupCustomer.Use(midd.AuthenticationCustomer)
+	groupCustomer.GET("/profile", controllers.DataUser)
+
 	r.Logger.Fatal(r.Start(PORT))
 }

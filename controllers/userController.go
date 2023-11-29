@@ -7,6 +7,7 @@ import (
 	"golang-final-project-user/helpers"
 	"golang-final-project-user/models"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -72,6 +73,10 @@ func UpdateUser(ctx echo.Context) error {
 	}
 	updateUser.ID = uint(iduint)
 
+	if updateUser.Roles == "" {
+		updateUser.Roles = os.Getenv("ROLES_USER")
+	}
+
 	err = db.Save(&updateUser).Error
 	if err != nil {
 		return GenerateErrorResponse(ctx, err.Error())
@@ -130,6 +135,25 @@ func DetailUser(ctx echo.Context) error {
 	}
 
 	return GenerateSuccessResponse(ctx, "Get User dengan ID "+id+" Berhasil", existingUser)
+}
+
+func DataUser(ctx echo.Context) error {
+	db := config.GetDB()
+
+	userData, ok := ctx.Get("userData").(*helpers.Claims)
+
+	if !ok {
+		return GenerateErrorResponse(ctx, "Gagal Mendapatkan Data User")
+	}
+
+	existingUser := models.Users{}
+	db.First(&existingUser, userData.ID)
+
+	if (models.Users{}) == existingUser {
+		return GenerateErrorResponse(ctx, "Gagal Mendapatkan Data User")
+	}
+
+	return GenerateSuccessResponse(ctx, "Get User Berhasil", existingUser)
 }
 
 func ListUser(ctx echo.Context) error {
