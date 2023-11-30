@@ -14,6 +14,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Summary Register User
+// @Description Register User
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param models.CreateUsers body models.CreateUsers true "Register"
+// @Success 200 {array} models.Response "ok"
+// @Router /register [post]
 func RegisterUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -39,6 +48,48 @@ func RegisterUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Register User Berhasil", registerUser)
 }
 
+// @Summary Create User
+// @Description Create User
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param models.CreateUsers body models.CreateUsers true "Create"
+// @Success 200 {array} models.Users "ok"
+// @Router /admin/create-user [post]
+func CreateUser(ctx echo.Context) error {
+	db := config.GetDB()
+
+	registerUser := models.Users{}
+
+	if err := ctx.Bind(&registerUser); err != nil {
+		fmt.Println(err)
+		return GenerateErrorResponse(ctx, "Format Data Salah")
+	}
+
+	existingUser := models.Users{}
+	db.Where("LOWER(username) = ?", strings.ToLower(registerUser.Username)).First(&existingUser)
+
+	if (models.Users{}) != existingUser {
+		return GenerateErrorResponse(ctx, "Username Telah Digunakan")
+	}
+	err := db.Create(&registerUser).Error
+	if err != nil {
+		fmt.Println(err)
+		return GenerateErrorResponse(ctx, err.Error())
+	}
+
+	return GenerateSuccessResponse(ctx, "Register User Berhasil", registerUser)
+}
+
+// @Summary Update User
+// @Description Update a user by their ID
+// @Tags Admin
+// @Produce json
+// @Param id path int true "User ID"
+// @Param models.CreateUsers body models.CreateUsers true "Register"
+// @Success 200 {object} models.Response
+// @Router /admin/update-user/{id} [put]
 func UpdateUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -85,6 +136,15 @@ func UpdateUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Update User Berhasil", updateUser)
 }
 
+// @Summary Delete User
+// @Description Delete User
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "User ID"
+// @Success 200 {array} models.Response "ok"
+// @Router /admin/delete-user/{id} [delete]
 func DeleteUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -114,6 +174,13 @@ func DeleteUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Delete User dengan ID "+id+" Berhasil", nil)
 }
 
+// @Summary Get User Detail
+// @Description Get User detail by their id
+// @Tags Admin
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} models.Response
+// @Router /admin/detail-user/{id} [get]
 func DetailUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -137,6 +204,12 @@ func DetailUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Get User dengan ID "+id+" Berhasil", existingUser)
 }
 
+// @Summary Get Own User Data
+// @Description Get logged in User
+// @Tags Customer
+// @Produce json
+// @Success 200 {object} models.Response
+// @Router /customer/profile [get]
 func DataUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -165,7 +238,7 @@ func DataUser(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Success 200 {array} models.Users "ok"
+// @Success 200 {object} models.Response
 // @Router /admin/list-user [get]
 func ListUser(ctx echo.Context) error {
 	db := config.GetDB()
@@ -181,8 +254,8 @@ func ListUser(ctx echo.Context) error {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Param models.Users body models.Users true "Login"
-// @Success 200 {string} string "JWT token"
+// @Param models.LoginUsers body models.LoginUsers true "Login"
+// @Success 200 {object} models.Response
 // @Router /login [post]
 func LoginUser(ctx echo.Context) error {
 	db := config.GetDB()
@@ -233,12 +306,11 @@ func LoginUser(ctx echo.Context) error {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Success 200 {string} models.Response "ok"
+// @Success 200 {object} models.Response
 // @Router /logout [get]
 func LogoutUser(ctx echo.Context) error {
 	db := config.GetDB()
 	tokenString := ctx.Request().Header.Get("Authorization")
-
 	if tokenString == "" {
 		tokenString = GetTokenFromDB()
 	}
@@ -289,8 +361,11 @@ func GetTokenFromDB() string {
 	db.First(&existingToken)
 
 	if (models.Token{}) == existingToken {
-		return ""
+		return "Bearer nil"
 	}
 
+	if existingToken.Token == "" {
+		return "Bearer nil"
+	}
 	return "Bearer " + existingToken.Token
 }

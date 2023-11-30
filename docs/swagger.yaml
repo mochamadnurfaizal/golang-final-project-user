@@ -1,5 +1,36 @@
 basePath: /
 definitions:
+  models.CreateUsers:
+    properties:
+      fullname:
+        example: Juann
+        type: string
+      password:
+        example: Juann
+        type: string
+      username:
+        example: Juann
+        type: string
+    type: object
+  models.LoginUsers:
+    properties:
+      password:
+        example: Juann
+        type: string
+      username:
+        example: Juann
+        type: string
+    type: object
+  models.Response:
+    properties:
+      data: {}
+      messages:
+        example: string
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
   models.Users:
     properties:
       created_at:
@@ -31,11 +62,18 @@ info:
     Sompotan
   title: API Documentation User Service
 paths:
-  /admin/list-user:
-    get:
+  /admin/create-user:
+    post:
       consumes:
       - application/json
-      description: Get User Data
+      description: Create User
+      parameters:
+      - description: Create
+        in: body
+        name: models.CreateUsers
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUsers'
       produces:
       - application/json
       responses:
@@ -47,9 +85,108 @@ paths:
             type: array
       security:
       - BearerAuth: []
+      summary: Create User
+      tags:
+      - Admin
+  /admin/delete-user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.Response'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Delete User
+      tags:
+      - Admin
+  /admin/detail-user/{id}:
+    get:
+      description: Get User detail by their id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get User Detail
+      tags:
+      - Admin
+  /admin/list-user:
+    get:
+      consumes:
+      - application/json
+      description: Get User Data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
       summary: Get User Data
       tags:
       - Admin
+  /admin/update-user/{id}:
+    put:
+      description: Update a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Register
+        in: body
+        name: models.CreateUsers
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Update User
+      tags:
+      - Admin
+  /customer/profile:
+    get:
+      description: Get logged in User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Own User Data
+      tags:
+      - Customer
   /login:
     post:
       consumes:
@@ -58,17 +195,17 @@ paths:
       parameters:
       - description: Login
         in: body
-        name: models.Users
+        name: models.LoginUsers
         required: true
         schema:
-          $ref: '#/definitions/models.Users'
+          $ref: '#/definitions/models.LoginUsers'
       produces:
       - application/json
       responses:
         "200":
-          description: JWT token
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Response'
       summary: User Login
       tags:
       - Authentication
@@ -81,10 +218,36 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Response'
       summary: Logout User
       tags:
       - Authentication
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      parameters:
+      - description: Register
+        in: body
+        name: models.CreateUsers
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.Response'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Register User
+      tags:
+      - Customer
 swagger: "2.0"

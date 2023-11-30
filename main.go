@@ -53,7 +53,7 @@ func main() {
 
 	groupAdmin := r.Group("/admin")
 	groupAdmin.Use(midd.AuthenticationAdmin)
-	groupAdmin.POST("/create-user", controllers.RegisterUser)
+	groupAdmin.POST("/create-user", controllers.CreateUser)
 	groupAdmin.PUT("/update-user/:id", controllers.UpdateUser)
 	groupAdmin.GET("/detail-user/:id", controllers.DetailUser)
 
