@@ -36,7 +36,7 @@ func main() {
 	r := echo.New()
 
 	r.GET("/", func(ctx echo.Context) error {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/swagger/index.html")
 	})
 
 	r.GET("/anya", func(ctx echo.Context) error {
