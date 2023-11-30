@@ -6,17 +6,20 @@ import (
 	"golang-final-project-user/helpers"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
 )
 
 type Users struct {
-	gorm.Model
-	Username string `json:"username" form:"username" query:"username" gorm:"not null;unique;varchar(200)" swagger:"description(Username)" example:"Ijal" valid:"required~Username harus diisi"`
-	Fullname string `json:"fullname" form:"fullname" query:"fullname" gorm:"not null;varchar(200)" swagger:"description(Full Name)" example:"Nurfaizal" valid:"required~Full name harus diisi"`
-	Roles    string `json:"roles" form:"roles" query:"roles" gorm:"not null;varchar(200)"`
-	Password string `json:"password" form:"password" query:"password" gorm:"not null;varchar(200)" swagger:"description(Password)" example:"Password" valid:"required~Password harus diisi"`
+	ID        uint      `gorm:"primaryKey" json:"id" swagger:"description(id)" example:"1"`
+	CreatedAt time.Time `json:"created_at" swagger:"description(Created at)" example:""`
+	UpdatedAt time.Time `json:"updated_at" swagger:"description(Updated at)" example:""`
+	Username  string    `json:"username" form:"username" query:"username" gorm:"not null;unique;varchar(200)" swagger:"description(Username)" example:"Ijal" valid:"required~Username harus diisi"`
+	Fullname  string    `json:"fullname" form:"fullname" query:"fullname" gorm:"not null;varchar(200)" swagger:"description(Full Name)" example:"Nurfaizal" valid:"required~Full name harus diisi"`
+	Roles     string    `json:"roles" form:"roles" query:"roles" gorm:"not null;varchar(200)"`
+	Password  string    `json:"password" form:"password" query:"password" gorm:"not null;varchar(200)" swagger:"description(Password)" example:"Password" valid:"required~Password harus diisi"`
 }
 
 func (e *Users) BeforeCreate(tx *gorm.DB) (err error) {

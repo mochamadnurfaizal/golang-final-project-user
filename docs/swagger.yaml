@@ -1,0 +1,75 @@
+basePath: /
+definitions:
+  models.Users:
+    properties:
+      created_at:
+        example: ""
+        type: string
+      fullname:
+        example: Nurfaizal
+        type: string
+      id:
+        example: 1
+        type: integer
+      password:
+        example: Password
+        type: string
+      roles:
+        type: string
+      updated_at:
+        example: ""
+        type: string
+      username:
+        example: Ijal
+        type: string
+    type: object
+host: localhost:8088
+info:
+  contact: {}
+  description: Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis
+    Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Immanuel Juan Junior
+    Sompotan
+  title: API Documentation User Service
+paths:
+  /admin/list-user:
+    get:
+      consumes:
+      - application/json
+      description: Get User Data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.Users'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get User Data
+      tags:
+      - Admin
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login and get JWT token
+      parameters:
+      - description: Login
+        in: body
+        name: models.Users
+        required: true
+        schema:
+          $ref: '#/definitions/models.Users'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT token
+          schema:
+            type: string
+      summary: User Login
+      tags:
+      - Authentication
+swagger: "2.0"

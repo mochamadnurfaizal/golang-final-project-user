@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"golang-final-project-user/controllers"
 	"golang-final-project-user/helpers"
 	"golang-final-project-user/models"
 	"net/http"
@@ -13,6 +14,10 @@ import (
 func AuthenticationCustomer(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tokenString := c.Request().Header.Get("Authorization")
+		if tokenString == "" {
+			tokenString = controllers.GetTokenFromDB()
+		}
+
 		verifyToken, err := helpers.VerifyToken(tokenString)
 
 		if err != nil {
@@ -31,6 +36,10 @@ func AuthenticationCustomer(next echo.HandlerFunc) echo.HandlerFunc {
 func AuthenticationAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tokenString := c.Request().Header.Get("Authorization")
+
+		if tokenString == "" {
+			tokenString = controllers.GetTokenFromDB()
+		}
 
 		verifyToken, err := helpers.VerifyToken(tokenString)
 

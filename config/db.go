@@ -44,7 +44,7 @@ func ConnectGorm() {
 		panic(err)
 	}
 
-	DbGorm.AutoMigrate(models.Users{})
+	DbGorm.AutoMigrate(models.Users{}, models.Token{})
 	fmt.Println("Sukses Konek DB")
 
 }

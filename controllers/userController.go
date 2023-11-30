@@ -156,6 +156,17 @@ func DataUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Get User Berhasil", existingUser)
 }
 
+// ListUser godoc
+// GetListUser return User Data
+// GetListUser godoc
+// @Summary Get User Data
+// @Description Get User Data
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} models.Users "ok"
+// @Router /admin/list-user [get]
 func ListUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -165,6 +176,14 @@ func ListUser(ctx echo.Context) error {
 	return GenerateSuccessResponse(ctx, "Get List User Berhasil", existingUser)
 }
 
+// @Summary User Login
+// @Description Login and get JWT token
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param models.Users body models.Users true "Login"
+// @Success 200 {string} string "JWT token"
+// @Router /login [post]
 func LoginUser(ctx echo.Context) error {
 	db := config.GetDB()
 
@@ -191,12 +210,25 @@ func LoginUser(ctx echo.Context) error {
 
 	token := helpers.GenerateToken(uint(user.ID), user.Username, user.Fullname, user.Roles)
 
+	existingToken := models.Token{}
+	db.First(&existingToken)
+
+	existingToken.ID = uint(1)
+	existingToken.Token = token
+
+	err = db.Save(&existingToken).Error
+	if err != nil {
+		fmt.Println(err)
+		return GenerateErrorResponse(ctx, err.Error())
+	}
+
 	return GenerateSuccessResponse(ctx, "Login User Berhasil", map[string]string{
 		"token": token,
 	})
 }
 
 func LogoutUser(ctx echo.Context) error {
+	db := config.GetDB()
 	tokenString := ctx.Request().Header.Get("Authorization")
 
 	claims, err := helpers.VerifyToken(tokenString)
@@ -222,7 +254,31 @@ func LogoutUser(ctx echo.Context) error {
 		return GenerateErrorResponse(ctx, "Gagal Invalidate Token")
 	}
 
+	existingToken := models.Token{}
+	db.First(&existingToken)
+
+	existingToken.ID = uint(1)
+	existingToken.Token = ""
+
+	err = db.Save(&existingToken).Error
+	if err != nil {
+		fmt.Println(err)
+		return GenerateErrorResponse(ctx, err.Error())
+	}
+
 	fmt.Printf("User %s logged out or token invalidated\n", claims.Username)
 
 	return GenerateSuccessResponse(ctx, "User logged out or token invalidated", nil)
+}
+
+func GetTokenFromDB() string {
+	db := config.GetDB()
+	existingToken := models.Token{}
+	db.First(&existingToken)
+
+	if (models.Token{}) == existingToken {
+		return ""
+	}
+
+	return "Bearer " + existingToken.Token
 }
