@@ -72,4 +72,19 @@ paths:
       summary: User Login
       tags:
       - Authentication
+  /logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Logout User
+      tags:
+      - Authentication
 swagger: "2.0"

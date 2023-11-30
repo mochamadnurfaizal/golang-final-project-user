@@ -227,9 +227,21 @@ func LoginUser(ctx echo.Context) error {
 	})
 }
 
+// LogoutUser godoc
+// @Summary Logout User
+// @Description Logout User
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Success 200 {string} models.Response "ok"
+// @Router /logout [get]
 func LogoutUser(ctx echo.Context) error {
 	db := config.GetDB()
 	tokenString := ctx.Request().Header.Get("Authorization")
+
+	if tokenString == "" {
+		tokenString = GetTokenFromDB()
+	}
 
 	claims, err := helpers.VerifyToken(tokenString)
 	if err != nil {
