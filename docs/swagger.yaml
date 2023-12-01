@@ -58,7 +58,7 @@ host: localhost:8088
 info:
   contact: {}
   description: Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis
-    Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Immanuel Juan Junior
+    Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Imanuel Juan Junior
     Sompotan
   title: API Documentation User Service
 paths:

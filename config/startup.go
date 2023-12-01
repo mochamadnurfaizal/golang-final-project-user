@@ -16,7 +16,7 @@ func StartingApps() {
 	fmt.Println("(Wait ya sembari liat karya ini WKWK)")
 	Progress()
 	fmt.Println()
-	fmt.Println("Developed By Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Immanuel Juan Junior Sompotan")
+	fmt.Println("Developed By Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Imanuel Juan Junior Sompotan")
 }
 func Progress() {
 	bar := progressbar.Default(100)

@@ -400,7 +400,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "API Documentation User Service",
-	Description:      "Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Immanuel Juan Junior Sompotan",
+	Description:      "Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Imanuel Juan Junior Sompotan",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
