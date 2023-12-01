@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Immanuel Juan Junior Sompotan",
+        "description": "Golang Final Project User Service, Developed by Moch Nurfaizal, Wasis Witjaksono, Andreas Mangaratua Girsang, M. Irfan Mauluddin, Imanuel Juan Junior Sompotan",
         "title": "API Documentation User Service",
         "contact": {}
     },
